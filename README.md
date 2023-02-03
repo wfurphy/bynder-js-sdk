@@ -40,39 +40,61 @@ details for a specific module, refer to the
 Before executing any request, you need to authorize the calls to the API:
 
 
-#### Using a permanent token
+### Using a permanent token
 ```js
 const bynder = new Bynder({
-  baseURL: "https//portal.getbynder.com/api/",
+  baseURL: "https//<your-portal>.getbynder.com/api/",
   permanentToken: "<token>",
 });
 ```
 
-#### Using OAuth2
+### Using OAuth2
 
-1. Call the constructor with your configuration
+Follow the steps for the **grant type** you configured for the OAuth2 app in Bynder. If you're unsure which grant type you should use you can review [this article](https://support.bynder.com/hc/en-us/articles/360013875180-Create-your-OAuth-Apps#UUID-aa268404-6dbe-05ea-04d8-79fc250d9f98_section-idm232162628742675) for more information.
+
+> :warning:	_Use a secrets file, environment variables or a secrets management service to populate your credentials. Don't ever include them in your codebase and git repository._
+
+#### Authorization Code + Refresh Token
+
+The most common flow where a user is directed to Bynder to login and then redirected back to the url you supplied to continue in your application.
 
 ```js
+// Call the constructor with your credentials
 const bynder = new Bynder({
-  baseURL: "https://portal.getbynder.com/api/",
+  baseURL: "https://<your-portal>.getbynder.com/api/",
   clientId: "<your OAuth2 client id>",
   clientSecret: "<your OAuth2 client secret>",
   redirectUri: "<url where user will be redirected after authenticating>"
 });
-```
-> _If you are using the `client_credentials` grant type, **skip to step 3**, you do not need to complete step 2._
-
-2. For `authorization_code` grant type, create an authorization URL, login and get one-time authorization code. 
-
-```js
+// Create an authorization URL, send the user to login and get a one-time authorization code
 const authorizationURL = bynder.makeAuthorizationURL();
 ```
-
-3. Exchange code for an access token. For `client_credentials` grant type simply omit the `code` argument.
+Once the user has logged in they will be redirected to your Redirect URL and from there:
 
 ```js
-bynder.getToken(code);
+// Collect the code from the URL however you choose, for example:
+const urlParams = new URLSearchParams(window.location.search);
+const code = urlParams.get('login_challenge');
+// Exchange that code for an access token 
+const token = bynder.getToken(code);
 ```
+
+#### Client Credentials
+
+This flow is most commonly used for machine to machine integrations. You specify the user that this app acts as when configuting the OAuth2 app in Bynder.
+
+```js
+// Call the constructor with your credentials
+const bynder = new Bynder({
+  baseURL: "https://<your-portal>.getbynder.com/api/",
+  clientId: "<your OAuth2 client id>",
+  clientSecret: "<your OAuth2 client secret>",
+});
+// Get an access token
+const token = bynder.getToken();
+// Store this code for the future if you plan to use it for machine <-> machine integration
+```
+#### Already have an access token?
 
 If you already have an access token, you can also initialize Bynder with the
 token directly:

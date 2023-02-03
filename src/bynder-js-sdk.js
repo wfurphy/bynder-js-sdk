@@ -165,7 +165,7 @@ class Bynder {
   constructor(options) {
     this.options = options;
     this.baseURL = options.baseURL;
-    this.redirectUri = options.redirectUri;
+    this.redirectUri = options.redirectUri || null;
 
     this.api = new APICall(
       options.baseURL,
@@ -222,25 +222,39 @@ class Bynder {
    * :: 2023-02-03 wfurphy ::> Added Support for Client Credentials grant type
    * @see {@link https://bynder.docs.apiary.io/#reference/oauth-2.0/token-endpoint|API Call}
    * 
-   * @param {String} [?code] - One time authorization code for authorization_code grant type. Leave null for client_credentials grant type
+   * @param {?String} [code] - One time authorization code for authorization_code grant type. Leave null for client_credentials grant type
+   * @param {String} [scope] - List of scopes to request to be granted to the access token. eg. `asset:read asset:write`
    * @return {String} access token
    */
-  getToken(code = null) {
+  getToken(code, scope) {
     const tokenConfig = {
       grant_type: 'client_credentials',
     }
 
-    if (code) {
-      tokenConfig.grant_type = 'authorization_code';
-      tokenConfig.code = code;
-      tokenConfig.redirect_uri = this.redirectUri;
-    };
+    let authMethod = 'clientCredentials';
 
-    return this.oauth2.authorizationCode.getToken(tokenConfig).then(result => {
+    if (this.redirectUri) {
+      if (!code || typeof code !== 'string') {
+        throw new Error(
+          "Invalid authorization code format: " + code ? JSON.stringify(code, null, 2) : ''
+        );
+      }
+
+      authMethod = 'authorizationCode';
+      tokenConfig.grant_type = 'authorization_code';
+      tokenConfig.code = code.trim();
+      tokenConfig.redirect_uri = this.redirectUri;
+    }
+
+    if(scope && typeof scope == 'string') {
+      tokenConfig.scope = scope.trim();
+    }
+
+    return this.oauth2[authMethod].getToken(tokenConfig).then(result => {
       const token = this.oauth2.accessToken.create(result);
       this.api.token = token;
       return token;
-    });
+    })
   }
 
   /**
