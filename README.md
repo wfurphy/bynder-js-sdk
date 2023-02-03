@@ -60,14 +60,15 @@ const bynder = new Bynder({
   redirectUri: "<url where user will be redirected after authenticating>"
 });
 ```
+> _If you are using the `client_credentials` grant type, **skip to step 3**, you do not need to complete step 2._
 
-2. Create an authorization URL, login and get one-time authorization code
+2. For `authorization_code` grant type, create an authorization URL, login and get one-time authorization code. 
 
 ```js
 const authorizationURL = bynder.makeAuthorizationURL();
 ```
 
-3. Exchange code for an access token
+3. Exchange code for an access token. For `client_credentials` grant type simply omit the `code` argument.
 
 ```js
 bynder.getToken(code);

@@ -218,13 +218,22 @@ class Bynder {
 
   /**
    * Gets OAuth2 access token from authorization code
-   * @param {String} code - One time authorization code
+   * 
+   * :: 2023-02-03 wfurphy ::> Added Support for Client Credentials grant type
+   * @see {@link https://bynder.docs.apiary.io/#reference/oauth-2.0/token-endpoint|API Call}
+   * 
+   * @param {String} [?code] - One time authorization code for authorization_code grant type. Leave null for client_credentials grant type
    * @return {String} access token
    */
-  getToken(code) {
+  getToken(code = null) {
     const tokenConfig = {
-      code: code,
-      redirect_uri: this.redirectUri
+      grant_type: 'client_credentials',
+    }
+
+    if (code) {
+      tokenConfig.grant_type = 'authorization_code';
+      tokenConfig.code = code;
+      tokenConfig.redirect_uri = this.redirectUri;
     };
 
     return this.oauth2.authorizationCode.getToken(tokenConfig).then(result => {
