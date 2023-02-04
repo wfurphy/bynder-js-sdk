@@ -1,12 +1,13 @@
 {
-  "name": "@bynder/bynder-js-sdk",
+  "name": "bynder-js-sdk",
   "version": "2.3.9",
   "description": "Bynder Javascript SDK",
   "main": "./dist/bynder-js-sdk.js",
   "scripts": {
     "test": "jest",
     "build": "gulp babel",
-    "prepublish": "gulp babel"
+    "prepublish": "gulp babel",
+    "postinstall": "gulp babel"
   },
   "author": "Bynder",
   "license": "MIT",
@@ -25,8 +26,6 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.15.1",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^7.0.1",
     "gulp-connect": "^5.7.0",
     "gulp-eslint": "^6.0.0",
     "gulp-jsdoc3": "^2.0.0",
@@ -36,6 +35,8 @@
     "webpack": "^4.41.0"
   },
   "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "axios": "^0.27.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
