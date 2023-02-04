@@ -2,7 +2,7 @@
   "name": "bynder-js-sdk",
   "version": "2.3.9",
   "description": "Bynder Javascript SDK",
-  "main": "./npm-git/bynder-js-sdk.js",
+  "main": "./npm/bynder-js-sdk.js",
   "scripts": {
     "test": "jest",
     "build": "gulp npm-git",
