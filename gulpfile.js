@@ -35,6 +35,24 @@ gulp.task("babel", () => {
     .pipe(gulp.dest("dist"));
 });
 
+gulp.task("npm-git", () => {
+  gulp
+    .src("src/*.js")
+    .pipe(
+      babel({
+        presets: ["env"],
+        plugins: ["transform-object-rest-spread",
+            ["transform-runtime", {
+                "polyfill": false,
+                "regenerator": true
+                }
+            ]
+        ]
+      })
+    )
+    .pipe(gulp.dest("npm"));
+});
+
 gulp.task("build", () => {
   webpack({
     entry: ["babel-polyfill", path.join(__dirname, "./src/bynder-js-sdk")],

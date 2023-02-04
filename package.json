@@ -2,17 +2,16 @@
   "name": "bynder-js-sdk",
   "version": "2.3.9",
   "description": "Bynder Javascript SDK",
-  "main": "./dist/bynder-js-sdk.js",
+  "main": "./npm-git/bynder-js-sdk.js",
   "scripts": {
     "test": "jest",
-    "build": "gulp babel",
-    "prepublish": "gulp babel",
-    "postinstall": "gulp babel"
+    "build": "gulp npm-git",
+    "prepublish": "gulp npm-git"
   },
   "author": "Bynder",
   "license": "MIT",
   "files": [
-    "dist/bynder-js-sdk.js"
+    "npm/bynder-js-sdk.js"
   ],
   "devDependencies": {
     "babel": "^6.23.0",
