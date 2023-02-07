@@ -76,7 +76,7 @@ Once the user has logged in they will be redirected to your Redirect URL and fro
 const urlParams = new URLSearchParams(window.location.search);
 const code = urlParams.get('login_challenge');
 // Exchange that code for an access token 
-const token = bynder.getToken(code);
+bynder.getToken(code);
 ```
 
 #### Client Credentials
@@ -91,8 +91,7 @@ const bynder = new Bynder({
   clientSecret: "<your OAuth2 client secret>",
 });
 // Get an access token
-const token = bynder.getToken();
-// Store this code for the future if you plan to use it for machine <-> machine integration
+bynder.getToken();
 ```
 #### Already have an access token?
 
